@@ -7,6 +7,7 @@ on:
     types: [ published ]
     
 env:
+  DOTNET_VERSION: 5.0.x
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_URL: "https://nuget.pkg.github.com/${{ github.REPOSITORY_OWNER }}/index.json"
 
@@ -22,7 +23,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }}
         source-url: ${{ env.GITHUB_URL }}
       env:
         NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}

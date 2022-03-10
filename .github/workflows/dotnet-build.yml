@@ -7,6 +7,7 @@ on:
     branches: [ main ]
     
 env:
+  DOTNET_VERSION: 5.0.x
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_URL: "https://nuget.pkg.github.com/${{ github.REPOSITORY_OWNER }}/index.json"
 
@@ -22,7 +23,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }}
         source-url: ${{ env.GITHUB_URL }}
       env:
         NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
@@ -35,7 +36,7 @@ jobs:
         default-pre-release-phase: alpha
 
     - name: Create packages
-      run: dotnet pack Pacman.sln --configuration Release -p:PackageVersion=${{ steps.version.outputs.version }} --output ${{ env.DOTNET_ROOT }}/nupkgs
+      run: dotnet pack --configuration Release -p:PackageVersion=${{ steps.version.outputs.version }} --output ${{ env.DOTNET_ROOT }}/nupkgs
       working-directory: src
       
     - name: Upload a Build Artifact
@@ -52,7 +53,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: ${{ env.DOTNET_VERSION }}
         source-url: ${{ env.GITHUB_URL }}
       env:
         NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
@@ -74,7 +75,7 @@ jobs:
   #  - name: Setup .NET
   #    uses: actions/setup-dotnet@v1
   #    with:
-  #      dotnet-version: 5.0.x
+  #      dotnet-version: ${{ env.DOTNET_VERSION }}
   #      source-url: ${{ env.GITHUB_URL }}
   #    env:
   #      NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
