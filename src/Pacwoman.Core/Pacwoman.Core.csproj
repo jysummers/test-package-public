@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<Authors>Unified Microsystems Developers</Authors>
+		<Company>Unified Mictrosystems</Company>
+		<PackageDescription></PackageDescription>
+
+		<RepositoryUrl>https://github.com/jysummers/test-package-public</RepositoryUrl>
+	</PropertyGroup>
+
+</Project>

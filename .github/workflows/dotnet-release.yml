@@ -1,0 +1,41 @@
+name: .NET Automated Release
+
+on:
+  release:
+    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+    # types: [published, created, edited]
+    types: [ published ]
+    
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_URL: "https://nuget.pkg.github.com/${{ github.REPOSITORY_OWNER }}/index.json"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source codes
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        source-url: ${{ env.GITHUB_URL }}
+      env:
+        NUGET_AUTH_TOKEN: ${{ env.GITHUB_TOKEN }}
+
+    - name: Run GetVersionAction
+      id: get_version
+      uses: battila7/get-version-action@v2
+
+    - name: Create packages
+      run: dotnet pack Pacman.sln --configuration Release -p:PackageVersion=${{ steps.get_version.outputs.version-without-v }} --output ${{ env.DOTNET_ROOT }}/myapp
+      working-directory: src
+      
+    - name: Push packages
+      run: dotnet nuget push '*.nupkg' --api-key ${{ env.GITHUB_TOKEN }} --source ${{ env.GITHUB_URL }}
+      working-directory: ${{env.DOTNET_ROOT}}/myapp
+      
